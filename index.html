@@ -15,22 +15,20 @@
             <h6 class="text-center">Choo Choo Mother Trucker</h6
         </div>
 
-
-
-
-
-
     </div>
     <div class="row">
         Current Train Schedule
-        <table class="table">
-            <tr>
+        <table class="table" id="train-table">
+            <thead>
                 <th scope="col">Current Train Schedule</th>
-                <th col="col">Destination</th>
-                <th col="col">Frequency (min)</th>
-                <th col="col">Next Arrival</th>
-                <th col="col">Minutes Away</th>
-            </tr>
+                <th scope="col">Destination</th>
+                <th scope="col">Frequency (min)</th>
+                <th scope="col">Next Arrival</th>
+                <th scope="col">Minutes Away</th>
+            </thead>
+            <tbody class="">
+
+            </tbody>
         </table>    
     </div>
     <hr>
@@ -42,23 +40,26 @@
                 </div>
                 <div class="form-group row">
                     <label for="destination">Destination</label>
-                    <input class="form-control" id="bidder-price" type="number">
+                    <input class="form-control" id="destination" type="text">
                 </div>
                 <div class="form-group row">
-                    <label for="first-train-time">First Train Time (HH:mm - military time)</label>
-                    <input class="form-control" id="train-name" type="text">
+                    <label for="first-train-time" class = "col-12">First Train Time (HH:mm - military time)</label>
+                    <input class="form-control col-6" id="train-hours" type="number" placeholder="hrs" min="0" max="24">
+                    <input class="form-control col-6" id="train-minutes" type="number" placeholder="mins" min="0" max = "59">
                 </div>
                 <div class="form-group row">
                     <label for="frequency">Frequency (min)</label>
-                    <input class="form-control" id="bidder-price" type="number">
+                    <input class="form-control" id="frequency" type="number">
                 </div>
-                <button class="btn btn-primary" id="submit-bid" type="submit">Submit</button>
+                <button class="btn btn-primary" id="submit" type="submit">Submit</button>
             </form>
 
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="./assets/javascript/app.js"></script>
 </body>
 </html>
