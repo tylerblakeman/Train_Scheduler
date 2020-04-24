@@ -21,17 +21,15 @@ $("#submit").click(function(){
   var trainName = $("#train-name").val().trim();
   var destination = $("#destination").val().trim();
 
-//using hours and minutes 
-  var trainHours = $("#train-hours").val().trim();
-  var trainMins = $("#train-minutes").val().trim();
+  //getting train time & frequency
+  var trainTime = $("#train-time").val().trim();
   var frequency = $("#frequency").val().trim();
   
   //temporary variable to hold the train info
   var newTrain = {
     name: trainName,
     destination: destination,
-    trainHours: trainHours,
-    trainMins: trainMins, 
+    trainTime: trainTime, 
     frequency: frequency,
   };
 
@@ -41,8 +39,7 @@ $("#submit").click(function(){
   //clear the text boxes
   $("#train-name").val("");
   $("#destination").val("");
-  $("#train-hours").val("");
-  $("#train-minutes").val("");
+  $("#train-time").val("");
   $("#frequency").val("");
  
 })
@@ -54,37 +51,41 @@ database.ref().on("child_added", function(childSnapshot) {
   // Store everything into a variable.
   var trainNameI = childSnapshot.val().name;
   var destinationI = childSnapshot.val().destination;
-  var trainHoursI = childSnapshot.val().trainHours;
-  var trainMinsI = childSnapshot.val().trainMins;
+  var trainTimeI = childSnapshot.val().trainTime;
   var frequencyI = childSnapshot.val().frequency;
 
-  var today = new Date();
-  var hours = today.getHours();
-  var minutes = today.getMinutes();
-  console.log(hours);
-  console.log(minutes);
   
-  //how do I get the times to work right???? 
-  trainMinsI = (+trainMinsI+(+trainHoursI*60))-288;
-  console.error("The time possibly?"+trainMinsI)
-  time_convert(trainMinsI);
+  // Current Time
+  var currentTime = moment();
+  console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
   
-  
-  
-  function time_convert(num)
- { 
-  var hours = Math.floor(num / 60);  
-  var minutes = num % 60;
-  return console.log(hours + ":" + minutes);         
-}
+  // First Time (pushed back 1 year to make sure it comes before current time)
+  var trainTimeIConverted = moment(trainTimeI, "HH:mm").subtract(1, "years");
+  console.log(trainTimeIConverted);
+
+  // Difference between the times
+  var diffTime = moment().diff(moment(trainTimeIConverted), "minutes");
+  console.log("DIFFERENCE IN TIME: " + diffTime);
+
+  // Time apart (remainder)
+  var tRemainder = diffTime % frequencyI;
+  console.log(tRemainder); 
+
+  // Minute Until Train
+  var tMinutesTillTrain = frequencyI - tRemainder;
+  console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+  // Next Train
+  var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+  console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
 
     // Create the new row
     var newRow = $("<tr>").append(
       $("<td>").text(trainNameI),
       $("<td>").text(destinationI),
       $("<td>").text(frequencyI),
-      $("<td>").text("next arrival"),
-      $("<td>").text("minutes away")
+      $("<td>").text(moment(nextTrain).format("HH:mm")),
+      $("<td>").text(tMinutesTillTrain+ " minutes")
     );
   //Adding the new row to the table
   $("#train-table > tbody").append(newRow);
